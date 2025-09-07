@@ -3,14 +3,16 @@ $processName = "helldivers2"          # Process name (without .exe)
 $minVolume   = 95                     # Minimum mic volume (0 - 100)
 $interval    = 3                      # Seconds between checks
 
-# Import AudioDeviceCmdlets
 Import-Module AudioDeviceCmdlets -ErrorAction Stop
 
 Write-Host "Starting Helldivers 2 mic volume monitor..."
 Write-Host "Minimum mic volume: $minVolume%"
 Write-Host "Checking every $interval seconds."
 
-while ($true) {
+$numOfRetryAttempts = 3
+$retryAttempts = $numOfRetryAttempts
+
+while ($retryAttempts -ne 0) {
     # Check if Helldivers 2 is running
     $process = Get-Process -Name $processName -ErrorAction SilentlyContinue
 
@@ -26,7 +28,10 @@ while ($true) {
         }
     } else {
         Write-Host "Helldivers 2 not running. Waiting..."
+        $retryAttempts--
     }
 
     Start-Sleep -Seconds $interval
 }
+
+Write-Host "Max number of retries ($numOfRetryAttempts) reached. Stopping process."
