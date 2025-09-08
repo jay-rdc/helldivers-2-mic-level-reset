@@ -29,7 +29,11 @@ while ($retryAttempts -ne 0) {
         $retryAttempts--
     }
 
+    # Force garbage collection each loop to avoid memory leaks
+    [System.GC]::Collect()
+
     Start-Sleep -Seconds $interval
 }
 
 Write-Host "Max number of retries ($numOfRetryAttempts) reached. Stopping process."
+[System.GC]::Collect()
