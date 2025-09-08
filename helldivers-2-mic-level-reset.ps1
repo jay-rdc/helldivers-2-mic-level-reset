@@ -37,3 +37,4 @@ while ($retryAttempts -ne 0) {
 
 Write-Host "Max number of retries ($numOfRetryAttempts) reached. Stopping process."
 [System.GC]::Collect()
+Exit
