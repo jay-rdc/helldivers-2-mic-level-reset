@@ -21,10 +21,10 @@ while ($retryAttempts -ne 0) {
         $currentVolume = Get-AudioDevice -RecordingVolume
 
         if ($currentVolume -ge 0 -and $currentVolume -lt $minVolume) {
-            Write-Host "$timestamp Mic volume is $currentVolume. Restoring to $minVolume%..."
+            Write-Host "$timestamp Mic volume is $currentVolume. Restoring to $minVolume%..." -ForegroundColor Yellow
             Set-AudioDevice -RecordingVolume $minVolume
         } else {
-            Write-Host "$timestamp Mic volume OK: $currentVolume"
+            Write-Host "$timestamp Mic volume OK: $currentVolume" -ForegroundColor Green
         }
     } else {
         Write-Host "$timestamp Helldivers 2 not running. Waiting..."
@@ -40,6 +40,6 @@ while ($retryAttempts -ne 0) {
     $timestamp = "[$(Get-Date -Format 'HH:mm:ss')]"
 }
 
-Write-Host "$timestamp Max number of retries ($numOfRetryAttempts) reached. Stopping process."
+Write-Host "$timestamp Max number of retries ($numOfRetryAttempts) reached. Stopping process." -ForegroundColor Red
 [System.GC]::Collect()
 Exit
