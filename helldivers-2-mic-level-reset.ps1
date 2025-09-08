@@ -1,7 +1,7 @@
 # SETTINGS
 $processName = "helldivers2"          # Process name (without .exe)
 $minVolume   = 95                     # Minimum mic volume (0 - 100)
-$interval    = 3                      # Seconds between checks
+$interval    = 1                      # Seconds between checks
 
 Import-Module AudioDeviceCmdlets -ErrorAction Stop
 
