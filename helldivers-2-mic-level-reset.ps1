@@ -12,6 +12,8 @@ Write-Host "Checking every $interval second(s)."
 $numOfRetryAttempts = 3
 $retryAttempts = $numOfRetryAttempts
 
+# Timestamp is instantiated here so it can be referenced outside of the while loop
+$timestamp = "[$(Get-Date -Format 'HH:mm:ss')]"
 while ($retryAttempts -ne 0) {
     $processIsRunning = Get-Process -Name $processName -ErrorAction SilentlyContinue
 
@@ -19,13 +21,13 @@ while ($retryAttempts -ne 0) {
         $currentVolume = Get-AudioDevice -RecordingVolume
 
         if ($currentVolume -ge 0 -and $currentVolume -lt $minVolume) {
-            Write-Host "Mic volume is $currentVolume. Restoring to $minVolume%..."
+            Write-Host "$timestamp Mic volume is $currentVolume. Restoring to $minVolume%..."
             Set-AudioDevice -RecordingVolume $minVolume
         } else {
-            Write-Host "Mic volume OK: $currentVolume"
+            Write-Host "$timestamp Mic volume OK: $currentVolume"
         }
     } else {
-        Write-Host "Helldivers 2 not running. Waiting..."
+        Write-Host "$timestamp Helldivers 2 not running. Waiting..."
         $retryAttempts--
     }
 
@@ -33,8 +35,11 @@ while ($retryAttempts -ne 0) {
     [System.GC]::Collect()
 
     Start-Sleep -Seconds $interval
+
+    # Update timestamp after interval
+    $timestamp = "[$(Get-Date -Format 'HH:mm:ss')]"
 }
 
-Write-Host "Max number of retries ($numOfRetryAttempts) reached. Stopping process."
+Write-Host "$timestamp Max number of retries ($numOfRetryAttempts) reached. Stopping process."
 [System.GC]::Collect()
 Exit
