@@ -7,17 +7,15 @@ Import-Module AudioDeviceCmdlets -ErrorAction Stop
 
 Write-Host "Starting Helldivers 2 mic volume monitor..."
 Write-Host "Minimum mic volume: $minVolume%"
-Write-Host "Checking every $interval seconds."
+Write-Host "Checking every $interval second(s)."
 
 $numOfRetryAttempts = 3
 $retryAttempts = $numOfRetryAttempts
 
 while ($retryAttempts -ne 0) {
-    # Check if Helldivers 2 is running
-    $process = Get-Process -Name $processName -ErrorAction SilentlyContinue
+    $processIsRunning = Get-Process -Name $processName -ErrorAction SilentlyContinue
 
-    if ($process) {
-        # Game is running — monitor mic volume
+    if ($processIsRunning) {
         $currentVolume = Get-AudioDevice -RecordingVolume
 
         if ($currentVolume -ge 0 -and $currentVolume -lt $minVolume) {
